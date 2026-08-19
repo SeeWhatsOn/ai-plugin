@@ -1,0 +1,12 @@
+---
+description: Baseline house style for readable, maintainable changes
+alwaysApply: true
+---
+
+house-style:
+
+- Small, focused changes with one clear purpose per commit.
+- Descriptive names. No single-letter variables outside tight loops.
+- Comments only where the logic is non-obvious.
+- Match the surrounding file's idiom rather than introducing a new one.
+- Update user-facing docs in the same change as the behaviour.

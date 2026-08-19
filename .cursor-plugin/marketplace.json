@@ -1,0 +1,18 @@
+{
+  "name": "watson-ai",
+  "owner": {
+    "name": "Chris Watson",
+    "email": "cwatson1988@gmail.com"
+  },
+  "metadata": {
+    "description": "Chris Watson's AI plugins for Claude Code and Cursor",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "watson-core",
+      "source": "./plugins/watson-core",
+      "description": "Everyday review, shipping and house-style helpers."
+    }
+  ]
+}

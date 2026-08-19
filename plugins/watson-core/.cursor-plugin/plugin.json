@@ -1,0 +1,21 @@
+{
+  "name": "watson-core",
+  "displayName": "Watson Core",
+  "version": "0.1.0",
+  "description": "Everyday review, shipping and house-style helpers.",
+  "author": {
+    "name": "Chris Watson",
+    "email": "cwatson1988@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "review",
+    "workflow",
+    "standards"
+  ],
+  "logo": "assets/logo.svg",
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "rules": "./rules/"
+}

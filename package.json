@@ -1,0 +1,9 @@
+{
+  "name": "ai-plugin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check && claude plugin validate ."
+  }
+}

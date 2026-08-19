@@ -1,0 +1,55 @@
+{
+  "name": "watson-ai",
+  "owner": {
+    "name": "Chris Watson",
+    "email": "cwatson1988@gmail.com"
+  },
+  "description": "Chris Watson's AI plugins for Claude Code and Cursor",
+  "version": "0.1.0",
+
+  "favourites": {
+    "_comment": "The running list of plugins I actually use, and who they are by. Edit here, then `npm run build` to regenerate FAVOURITES.md and install-favourites.sh.",
+
+    "marketplaces": [
+      { "name": "claude-plugins-official",  "source": "anthropics/claude-plugins-official" },
+      { "name": "addy-agent-skills",        "source": "addyosmani/agent-skills" },
+      { "name": "mattpocock",               "source": "mattpocock/skills" },
+      { "name": "skills",                   "source": "humanlayer/skills" },
+      { "name": "langfuse-observability",   "source": "langfuse/Claude-Observability-Plugin" },
+      { "name": "claude-code-warp",         "source": "warpdotdev/claude-code-warp" }
+    ],
+
+    "plugins": [
+      {
+        "name": "agent-skills",
+        "author": "Addy Osmani",
+        "from": "addy-agent-skills",
+        "note": "24 SDLC skills: spec, plan, TDD, review, ship. Ships Cursor + Codex + Gemini manifests too."
+      },
+      {
+        "name": "mattpocock-skills",
+        "author": "Matt Pocock",
+        "from": "mattpocock",
+        "note": "TypeScript-focused skills."
+      },
+      {
+        "name": "show-me",
+        "author": "HumanLayer",
+        "from": "skills",
+        "note": "Renders diagrams and visual explanations."
+      },
+      {
+        "name": "langfuse-observability",
+        "author": "Langfuse",
+        "from": "langfuse-observability",
+        "note": "Traces and cost/latency for LLM apps."
+      },
+      {
+        "name": "warp",
+        "author": "Warp",
+        "from": "claude-code-warp",
+        "note": "Warp terminal integration."
+      }
+    ]
+  }
+}
