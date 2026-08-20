@@ -5,10 +5,8 @@
 # Cursor has no CLI installer — see FAVOURITES.md for the Cursor route.
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 # --- my marketplace ---
-claude plugin marketplace add "$repo_root"
+claude plugin marketplace add SeeWhatsOn/ai-plugin
 claude plugin install watson-core@watson-ai
 
 # --- favourite marketplaces ---

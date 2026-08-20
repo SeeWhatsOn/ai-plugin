@@ -14,7 +14,7 @@ node scripts/build.mjs --check # CI: fail if the output is stale
 **Claude Code**
 
 ```bash
-claude plugin marketplace add cwatson/ai-plugin   # or a local path
+claude plugin marketplace add SeeWhatsOn/ai-plugin   # or a local path
 claude plugin install watson-core@watson-ai
 ```
 
@@ -31,6 +31,10 @@ ln -s "$PWD/plugins/watson-core" ~/.cursor/plugins/local/watson-core
 ```bash
 ./install-favourites.sh
 ```
+
+The script registers my own marketplace from the `repo` value in `marketplace.config.json`
+(`SeeWhatsOn/ai-plugin`), so it works on a machine with no clone. Drop `repo` and it falls
+back to the folder the script sits in.
 
 ## Day to day
 
@@ -69,7 +73,7 @@ plugins available, then you install by name. The settings route does both declar
 
 ```jsonc
 // .claude/settings.json — committed to a project repo
-"extraKnownMarketplaces": { "watson-ai": { "source": { "source": "github", "repo": "cwatson/ai-plugin" } } },
+"extraKnownMarketplaces": { "watson-ai": { "source": { "source": "github", "repo": "SeeWhatsOn/ai-plugin" } } },
 "enabledPlugins":        { "watson-core@watson-ai": true }
 ```
 

@@ -6,6 +6,7 @@
   },
   "description": "Chris Watson's AI plugins for Claude Code and Cursor",
   "version": "0.1.0",
+  "repo": "SeeWhatsOn/ai-plugin",
 
   "favourites": {
     "_comment": "The running list of plugins I actually use, and who they are by. Edit here, then `npm run build` to regenerate FAVOURITES.md and install-favourites.sh.",
