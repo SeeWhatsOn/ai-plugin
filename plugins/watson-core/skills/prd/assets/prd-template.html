@@ -1,0 +1,153 @@
+<title><!-- Short noun-phrase name, e.g. "Balance Visibility PRD" --></title>
+<!--
+  Skeleton for publishing a PRD as an Artifact.
+
+  Before using this, load the `artifact-design` skill — it calibrates how much design
+  investment the page warrants, and this file is only a starting structure, not a
+  finished design. Load `artifact-diagramming` too if the PRD needs a flow or story map.
+
+  No <!doctype>, <html>, <head> or <body> tags — the publisher wraps the file.
+  Mermaid renders natively inside <pre class="mermaid"> if a diagram helps.
+-->
+<style>
+  :root {
+    --bg: #fbfaf8;
+    --surface: #ffffff;
+    --border: #e3ded6;
+    --text: #1c1a17;
+    --muted: #6b655c;
+    --accent: #b0552a;
+    --must: #b0552a;
+    --should: #7a6a2f;
+    --could: #5a6b7a;
+    --wont: #8a8578;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16150f;
+      --surface: #1e1d16;
+      --border: #34322a;
+      --text: #f0ede6;
+      --muted: #a09a8e;
+      --accent: #e08a56;
+      --must: #e08a56;
+      --should: #c9b96a;
+      --could: #8fb0c9;
+      --wont: #8a8578;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16150f;
+    --surface: #1e1d16;
+    --border: #34322a;
+    --text: #f0ede6;
+    --muted: #a09a8e;
+    --accent: #e08a56;
+    --must: #e08a56;
+    --should: #c9b96a;
+    --could: #8fb0c9;
+    --wont: #8a8578;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 3rem 1.25rem 5rem;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .4rem; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 .75rem; border-bottom: 1px solid var(--border); padding-bottom: .4rem; }
+  h3 { font-size: 1rem; margin: 2rem 0 .5rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .lede { color: var(--muted); margin: 0 0 2rem; }
+
+  .facts { display: grid; grid-template-columns: auto 1fr; gap: .4rem 1.25rem; background: var(--surface);
+           border: 1px solid var(--border); border-radius: .5rem; padding: 1rem 1.25rem; }
+  .facts dt { color: var(--muted); font-size: .85rem; }
+  .facts dd { margin: 0; font-weight: 600; }
+
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+  th, td { text-align: left; padding: .55rem .7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+
+  .tag { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+         padding: .15rem .45rem; border-radius: .25rem; border: 1px solid currentColor; white-space: nowrap; }
+  .tag.must { color: var(--must); }
+  .tag.should { color: var(--should); }
+  .tag.could { color: var(--could); }
+  .tag.wont { color: var(--wont); }
+
+  .story { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+           border-radius: .4rem; padding: .9rem 1.1rem; margin: .75rem 0; }
+  .story p { margin: 0 0 .5rem; }
+  .story ul { margin: .4rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: .93rem; }
+
+  .assumption { color: var(--accent); font-weight: 700; font-size: .78rem; letter-spacing: .05em; }
+  .out li { color: var(--muted); }
+  .out b { color: var(--text); }
+</style>
+
+<main>
+  <h1><!-- Feature or product name --></h1>
+  <p class="lede"><!-- One sentence: what this is and who it's for. --></p>
+
+  <dl class="facts">
+    <dt>Participants</dt><dd><!-- --></dd>
+    <dt>Reviewer</dt><dd><!-- name a developer --></dd>
+    <dt>Status</dt><dd><!-- Draft --></dd>
+    <dt>Target release</dt><dd><!-- --></dd>
+    <dt>Last updated</dt><dd><!-- --></dd>
+  </dl>
+
+  <h2>Goals and business objectives</h2>
+  <p><!-- What we're achieving and why the business cares. --></p>
+
+  <h3>Success metrics</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Metric</th><th>Today</th><th>Target</th></tr></thead>
+      <tbody>
+        <tr><td><!-- --></td><td><!-- --></td><td><!-- --></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Background and strategic fit</h2>
+  <p><!-- The problem, who has it, why now. --></p>
+
+  <h2>Assumptions</h2>
+  <ul>
+    <li><span class="assumption">Assumption</span> <!-- what we're taking on faith --></li>
+  </ul>
+
+  <h2>User stories</h2>
+
+  <h3>Epic: <!-- name --></h3>
+  <div class="story">
+    <p><b>As a &lt;actor&gt;</b>, I want <b>&lt;capability&gt;</b>, so that <b>&lt;benefit&gt;</b>
+       <span class="tag must">Must</span></p>
+    <ul>
+      <li><!-- acceptance criterion --></li>
+    </ul>
+  </div>
+
+  <h2>User interaction and design</h2>
+  <p><!-- Links to wireframes and flows, or what's missing. --></p>
+
+  <h2>Open questions</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Question</th><th>Owner</th><th>Needed by</th></tr></thead>
+      <tbody>
+        <tr><td><!-- --></td><td><!-- --></td><td><!-- --></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>What we're not doing</h2>
+  <ul class="out">
+    <li><b><!-- thing --></b> — <!-- why it's out, and whether it comes back --></li>
+  </ul>
+</main>

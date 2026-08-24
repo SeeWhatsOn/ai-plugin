@@ -1,7 +1,7 @@
 {
   "name": "watson-core",
   "displayName": "Watson Core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Everyday review, shipping and house-style helpers.",
   "author": {
     "name": "Chris Watson",
