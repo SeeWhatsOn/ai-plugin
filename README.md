@@ -104,9 +104,12 @@ convention — nothing in any manifest lists them. Drop the file in, commit, don
 | **created or deleted** a whole component dir, `mcp.json`, `hooks/*.json`, `assets/logo.svg` | **yes** |
 
 Claude Code finds every component dir by convention, so its manifest stays metadata-only.
-Cursor's manifest lists them explicitly — that is what Cursor's own published plugins do,
-and their docs are thin enough not to rely on the documented defaults. `build.mjs` emits
-that list, which is why creating a *new* component dir needs a rebuild.
+Cursor finds `rules/`, `skills/`, `agents/` and `commands/` by convention too, but **only
+loads hooks and MCP when the manifest names them**. `build.mjs` declares all of them in the
+Cursor manifest — the two that matter, plus the four that don't, because Cursor's own
+`validate-template.mjs` checks every declared path exists. That turns a renamed or deleted
+folder into a build error instead of a component that quietly stops loading. It is also why
+creating a *new* component dir needs a rebuild.
 
 Nothing builds on commit. If you forget, CI fails with `--check` and names the stale files.
 Claude Code reads the manifests straight from GitHub and never runs this script, so the

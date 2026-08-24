@@ -96,16 +96,19 @@ function buildPlugin(dir) {
   emitJson(join(pluginDir, ".claude-plugin/plugin.json"), claude);
 
   // --- Cursor ----------------------------------------------------------
-  // Cursor discovers rules/, skills/, agents/, commands/ and mcp.json by convention,
-  // but every plugin Cursor themselves ship declares the component dirs explicitly.
-  // Cursor's plugin docs are thin, so we match their own output rather than rely on
-  // the documented defaults. Paths take the "./dir/" form their manifests use.
+  // Cursor discovers rules/, skills/, agents/ and commands/ by convention, so these
+  // declarations are belt-and-braces — cursor/plugin-template's own manifests omit
+  // them. They are kept because Cursor's validate-template.mjs checks exactly these
+  // fields (logo, rules, skills, agents, commands, hooks, mcpServers), so naming the
+  // dirs makes a missing one a build error rather than a silently absent component.
+  // hooks and mcpServers are NOT optional: Cursor only loads those when declared.
   const cursor = { ...pick(src, SHARED_FIELDS) };
   if (has("assets/logo.svg")) cursor.logo = "assets/logo.svg";
   for (const dir of ["skills", "agents", "commands", "rules"]) {
     if (has(dir)) cursor[dir] = `./${dir}/`;
   }
   if (has("hooks/cursor.hooks.json")) cursor.hooks = "./hooks/cursor.hooks.json";
+  if (has("mcp.json")) cursor.mcpServers = "./mcp.json";
   emitJson(join(pluginDir, ".cursor-plugin/plugin.json"), cursor);
 
   if (has("rules")) {
