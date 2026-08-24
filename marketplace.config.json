@@ -9,7 +9,7 @@
   "repo": "SeeWhatsOn/ai-plugin",
 
   "favourites": {
-    "_comment": "The running list of plugins I actually use, and who they are by. Edit here, then `npm run build` to regenerate FAVOURITES.md and install-favourites.sh.",
+    "_comment": "Other people's plugins I recommend. Signposted in the README only — never published in this marketplace and never installed by install.sh. Edit here, then `npm run build`.",
 
     "marketplaces": [
       { "name": "claude-plugins-official",  "source": "anthropics/claude-plugins-official" },
