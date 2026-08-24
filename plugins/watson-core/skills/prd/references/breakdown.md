@@ -74,3 +74,31 @@ MoSCoW, per story:
 Two things to watch. If nearly everything is a Must, no prioritisation has happened — push back and
 make the trade-off real. And **Won't is not the bin**: it is a record of a deliberate decision, so
 each one should say briefly why, and whether it might return later.
+
+## Which stories need acceptance criteria
+
+Not all of them, and pretending otherwise produces criteria written to fill a template.
+
+- **Must** — always. These define the release; if one cannot be shown to be done, nothing can ship.
+- **Should** — yes. They are close enough to the release that vagueness costs real time.
+- **Could** — not yet. Write them when one gets pulled into scope. Criteria for work that may never
+  happen is speculation with a checkbox next to it.
+
+A story with no criteria should look unfinished, because it is. Don't dress it up.
+
+## Build order
+
+Lettering epics A–E implies a sequence, and the sequence is usually wrong — the infrastructure epic
+tends to land last alphabetically and first in reality.
+
+So state the dependencies explicitly, as a diagram rather than a sentence. A `flowchart LR` with one
+node per epic and an arrow for each "blocks" relationship is enough, and it makes an accidental
+cycle visible immediately.
+
+Two things to check while drawing it:
+
+- **Arrows point one way.** If two epics each block the other, they are one epic, or the boundary
+  between them is in the wrong place.
+- **Name what unblocks the first thing.** Usually an open question or a piece of access, not an
+  epic — and if the whole graph is waiting on it, that belongs at the top of Open questions marked
+  as a blocker.

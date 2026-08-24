@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRD — &lt;product name&gt;</title>
+
+<!--
+  REFERENCE IMPLEMENTATION — read it for the component patterns, then design the real page.
+
+  Copying this verbatim gives every PRD the same face, which is the thing `artifact-design`
+  exists to prevent. What is worth keeping is the *structure*: the three-state theme tokens,
+  the story card, the priority chips, the measure table, the MoSCoW bar, the dependency
+  diagram, and the in/out scope split.
+
+  Self-contained on purpose — styles inline, no external assets, no build step. The one
+  network dependency is Google Fonts, which is the only font host an Artifact's CSP admits;
+  every face has a real fallback stack, so the page holds if it never loads.
+
+  Mermaid: renders natively when published as an Artifact. When this file is committed to a
+  repo and opened from disk it will show as plain text, so keep the diagram small enough to
+  read as source, or render it to inline SVG instead. See `references/publishing.md`.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  /* --- tokens: light is the bare :root, so the un-stamped default always resolves --- */
+  :root {
+    --ground:#f2f4f5; --surface:#ffffff; --sunk:#e9edef;
+    --ink:#131820; --muted:#5c6673; --line:#d9dfe3;
+    --accent:#0f5f6b; --accent-soft:#cfe2e3;
+    --must:#0f5f6b; --should:#5b7f86; --could:#93a8ac; --wont:#8a8f94;
+    --blocked:#a33c22; --risk:#86630f; --ok:#2c6a4a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0e1216; --surface:#161b21; --sunk:#1c222a;
+      --ink:#e7ebee; --muted:#97a1ad; --line:#2a313a;
+      --accent:#5fb8b4; --accent-soft:#21383c;
+      --must:#4ea6a3; --should:#3d7d7c; --could:#2b5557; --wont:#6b7178;
+      --blocked:#e28564; --risk:#d0a94a; --ok:#64b285;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0e1216; --surface:#161b21; --sunk:#1c222a;
+    --ink:#e7ebee; --muted:#97a1ad; --line:#2a313a;
+    --accent:#5fb8b4; --accent-soft:#21383c;
+    --must:#4ea6a3; --should:#3d7d7c; --could:#2b5557; --wont:#6b7178;
+    --blocked:#e28564; --risk:#d0a94a; --ok:#64b285;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:"Source Serif 4",Georgia,serif; font-size:17px; line-height:1.62;
+    margin:0; padding:3.5rem 1.25rem 6rem;
+  }
+  main{max-width:47rem; margin:0 auto; display:flex; flex-direction:column; gap:3rem}
+  section{display:flex; flex-direction:column; gap:1rem}
+
+  h1,h2,h3,.label,.chip,table,.id,.bar div{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+  h1{font-size:clamp(1.9rem,5vw,2.5rem); font-weight:700; letter-spacing:-.02em; line-height:1.1; margin:0; text-wrap:balance}
+  h2{font-size:1.15rem; font-weight:600; margin:0; padding-bottom:.5rem; border-bottom:2px solid var(--ink); text-wrap:balance}
+  h3{font-size:.95rem; font-weight:600; margin:0}
+  p{margin:0} p+p{margin-top:.8rem}
+  .label{font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.11em; color:var(--muted)}
+  .lede{font-size:1.15rem; line-height:1.5; text-wrap:balance}
+
+  /* --- header facts --- */
+  .facts{display:grid; grid-template-columns:auto 1fr; gap:.35rem 1.5rem; font-size:.88rem}
+  .facts dt{font-family:Archivo,sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); align-self:center}
+  .facts dd{margin:0}
+  .facts dd.todo{color:var(--blocked); font-weight:600}
+
+  /* --- tables --- */
+  .scroll{overflow-x:auto; border:1px solid var(--line); background:var(--surface)}
+  table{border-collapse:collapse; width:100%; font-size:.87rem; min-width:28rem}
+  th,td{text-align:left; padding:.6rem .8rem; border-bottom:1px solid var(--line); vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  th{font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:600; background:var(--sunk)}
+  td.num{font-variant-numeric:tabular-nums; text-align:right}
+  .unknown{color:var(--risk); font-weight:600}
+
+  /* --- MoSCoW bar: real counts, direct-labelled, 2px surface gaps --- */
+  figure{margin:0; display:flex; flex-direction:column; gap:.75rem}
+  figcaption{font-size:.85rem; color:var(--muted)}
+  .bar{display:flex; gap:2px; height:2.5rem}
+  .bar div{display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:600; color:var(--surface)}
+  .bar .b-must{background:var(--must)}
+  .bar .b-should{background:var(--should)}
+  .bar .b-could{background:var(--could); color:var(--ink)}
+
+  /* --- story cards --- */
+  .story{background:var(--surface); border:1px solid var(--line); padding:1rem 1.15rem; display:flex; flex-direction:column; gap:.55rem}
+  .story-head{display:flex; align-items:baseline; gap:.65rem; flex-wrap:wrap}
+  .id{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.78rem; color:var(--muted)}
+  .story p{font-size:.95rem}
+  .story ul{margin:0; padding-left:1.1rem; display:flex; flex-direction:column; gap:.3rem}
+  .story li{font-size:.9rem; color:var(--muted)}
+  .story li b{color:var(--ink)}
+  .unfinished{font-size:.85rem; color:var(--risk); font-family:Archivo,sans-serif}
+
+  .chip{font-size:.63rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; padding:.15rem .4rem; color:var(--surface); flex:none}
+  .chip.must{background:var(--must)}
+  .chip.should{background:var(--should)}
+  .chip.could{background:var(--could); color:var(--ink)}
+  .chip.blocker{background:var(--blocked)}
+
+  /* --- assumptions, riskiest first --- */
+  ol.assumptions{margin:0; padding-left:1.3rem; display:flex; flex-direction:column; gap:.7rem}
+  ol.assumptions li{font-size:.95rem}
+  .tag{font-family:Archivo,sans-serif; font-size:.65rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--accent)}
+  li.riskiest{border-left:3px solid var(--risk); padding-left:.8rem; margin-left:-1rem; list-style-position:inside}
+  li.riskiest .tag{color:var(--risk)}
+
+  /* --- scope split --- */
+  .scope{display:grid; grid-template-columns:repeat(auto-fit,minmax(16rem,1fr)); gap:2px; background:var(--line); border:1px solid var(--line)}
+  .scope > div{background:var(--surface); padding:1rem 1.15rem; display:flex; flex-direction:column; gap:.7rem}
+  .scope ul{margin:0; padding-left:1.05rem; display:flex; flex-direction:column; gap:.5rem}
+  .scope li{font-size:.9rem}
+  .scope li b{font-family:Archivo,sans-serif; font-weight:600}
+  .never{color:var(--blocked); font-weight:600; font-size:.8rem; font-family:Archivo,sans-serif}
+
+  pre.mermaid{background:var(--surface); border:1px solid var(--line); padding:1rem; overflow-x:auto; margin:0}
+  code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.85em; background:var(--sunk); padding:.06em .3em; border:1px solid var(--line)}
+  a{color:var(--accent)}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+
+  <header>
+    <p class="label">Product requirements</p>
+    <h1>&lt;Product or feature name&gt;</h1>
+    <p class="lede">&lt;One sentence: what this is, for whom, and what changes when it exists.&gt;</p>
+    <dl class="facts">
+      <dt>Participants</dt><dd>&lt;names&gt;</dd>
+      <dt>Reviewer</dt><dd class="todo">TBD — name a developer before this leaves draft</dd>
+      <dt>Status</dt><dd>Draft</dd>
+      <dt>Target release</dt><dd>&lt;date, or "not scheduled"&gt;</dd>
+      <dt>Updated</dt><dd>&lt;date&gt;</dd>
+      <dt>Research</dt><dd><a href="#">&lt;linked working, if any&gt;</a></dd>
+    </dl>
+  </header>
+
+  <section>
+    <h2>Who it's for</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Actor</th><th>Where they work</th><th>What they need from this</th></tr></thead>
+      <tbody>
+        <tr><td><b>&lt;actor&gt;</b></td><td>&lt;context&gt;</td><td>&lt;need&gt;</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Goals</h2>
+    <p>&lt;What we're achieving and why the business cares. Two or three sentences, then stop.&gt;</p>
+
+    <h3>Success measures</h3>
+    <!-- Real measures? Use the table. Judged qualitatively? Delete it and state the bar in prose. -->
+    <div class="scroll"><table>
+      <thead><tr><th>Measure</th><th>Today</th><th>Target</th></tr></thead>
+      <tbody>
+        <tr><td>&lt;what is judged&gt;</td><td class="unknown">unknown</td><td>&lt;the bar&gt;</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Background</h2>
+    <p>&lt;The problem, who has it, why now. Conclusions only — link the working.&gt;</p>
+  </section>
+
+  <section>
+    <h2>Assumptions</h2>
+    <ol class="assumptions">
+      <li class="riskiest">
+        <span class="tag">Assumption · riskiest</span>
+        &lt;What we're taking on faith, and what breaks if it's false.&gt;
+      </li>
+      <li><span class="tag">Assumption</span> &lt;…&gt;</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Build order</h2>
+    <pre class="mermaid">
+flowchart LR
+  C["Epic C · connection"] --> A["Epic A · outbound"]
+  C --> B["Epic B · inbound"]
+  A --> D["Epic D · rich context"]
+  B --> D
+    </pre>
+    <figcaption>Arrows point one way. If two epics block each other, they're one epic.</figcaption>
+  </section>
+
+  <section>
+    <h2>Stories</h2>
+    <figure>
+      <div class="bar">
+        <div class="b-must" style="flex:7">Must 7</div>
+        <div class="b-should" style="flex:7">Should 7</div>
+        <div class="b-could" style="flex:4">Could 4</div>
+      </div>
+      <figcaption>18 stories across 5 epics. Counts are real — they come from the tables below.</figcaption>
+    </figure>
+
+    <h3>Epic A — &lt;name&gt;</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Story</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="id">A1</td><td>As a <b>&lt;actor&gt;</b>, I want <b>&lt;capability&gt;</b>, so that <b>&lt;benefit&gt;</b></td><td><span class="chip must">Must</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="story">
+      <div class="story-head"><span class="id">A1</span><h3>&lt;short title&gt;</h3><span class="chip must">Must</span></div>
+      <p><b>Given</b> &lt;state&gt;, <b>when</b> &lt;action&gt;, <b>then</b> &lt;outcome&gt;.</p>
+      <ul>
+        <li>&lt;checkable condition&gt;</li>
+        <li>&lt;checkable condition&gt;</li>
+      </ul>
+    </div>
+
+    <!-- Coulds carry no criteria yet, and should look unfinished rather than padded: -->
+    <div class="story">
+      <div class="story-head"><span class="id">D2</span><h3>&lt;short title&gt;</h3><span class="chip could">Could</span></div>
+      <p class="unfinished">No acceptance criteria yet — written when this is pulled into scope.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Design</h2>
+    <p>&lt;Links to wireframes and flows. If none exist, say so and say what it blocks.&gt;</p>
+  </section>
+
+  <section>
+    <h2>Open questions</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Question</th><th>Owner</th><th>Needed by</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip blocker">Blocks</span> &lt;the one holding everything up&gt;</td><td>&lt;who&gt;</td><td>&lt;when&gt;</td></tr>
+        <tr><td>&lt;question&gt;</td><td>&lt;who&gt;</td><td>&lt;when&gt;</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Scope</h2>
+    <div class="scope">
+      <div>
+        <p class="label">In this release</p>
+        <ul><li>&lt;the Musts, in a line each&gt;</li></ul>
+      </div>
+      <div>
+        <p class="label">Not doing</p>
+        <ul>
+          <li><b>&lt;thing&gt;</b> — <span class="never">impossible</span>, &lt;why, and that it won't return&gt;</li>
+          <li><b>&lt;thing&gt;</b> — deferred; returns when &lt;condition&gt;</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Spun off</h2>
+    <p>&lt;Real problems found on the way that belong to someone else. One line each: what, where it
+    belongs, whether it blocks this. Delete the section if nothing turned up.&gt;</p>
+  </section>
+
+</main>
+</body>
+</html>

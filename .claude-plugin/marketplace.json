@@ -12,7 +12,7 @@
       "name": "watson-core",
       "source": "./plugins/watson-core",
       "description": "Everyday review, shipping and house-style helpers.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "author": {
         "name": "Chris Watson",
         "email": "cwatson1988@gmail.com"

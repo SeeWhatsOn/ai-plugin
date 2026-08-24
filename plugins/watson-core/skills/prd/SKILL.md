@@ -1,6 +1,6 @@
 ---
 name: prd
-description: Turns a product need into an agile Product Requirements Document — goals, business objectives, assumptions, prioritised user stories with acceptance criteria and success metrics, open questions, and explicit non-goals — following Atlassian's one-page PRD structure. Use this whenever the user describes something they want built for users rather than a code change: "I need a product that...", "we want users to be able to...", "write a PRD", "write a product spec", "break this requirement down", "what are the user stories for...", "turn this idea into requirements", or any point where a product need exists but nobody has written down who it is for, why it matters, or how you would know it worked. Use it BEFORE any engineering spec skill — a spec answers "how do we build it", this answers "what are we building and why". Also use when an existing PRD needs updating, re-scoping, or its stories re-prioritised.
+description: Turns a product need into a single self-contained HTML Product Requirements Document — actors, goals and success measures, assumptions ranked by risk, prioritised user stories with acceptance criteria, epic build order, open questions and explicit non-goals — built as one visual page with charts, tables and a dependency diagram, plus a short Markdown stub for the GitHub issue that links to it. Use this whenever the user describes something they want built for users rather than a code change: "I need a product that...", "we want users to be able to...", "write a PRD", "write a product spec", "break this requirement down", "what are the user stories for...", "turn this idea into requirements", or any point where a product need exists but nobody has written down who it is for, why it matters, or how you would know it worked. Use it BEFORE any engineering spec skill — a spec answers "how do we build it", this answers "what are we building and why". Also use when an existing PRD needs updating, re-scoping, or its stories re-prioritised.
 ---
 
 # PRD
@@ -12,22 +12,50 @@ what the thing is, who it is for, why it is worth doing, and how you will know i
 
 Skipping it is why teams build the wrong thing correctly.
 
-This skill follows Atlassian's agile PRD structure — deliberately lightweight, one page, links out
-to detail, updated as you learn. It is not a waterfall requirements document. Read
-`references/atlassian-prd.md` for the full section-by-section guidance and the reasoning behind
-each section.
+The structure follows Atlassian's agile PRD — deliberately lightweight, one page, links out to
+detail, updated as you learn. `references/atlassian-prd.md` has the section-by-section guidance and
+the reasoning behind each one.
 
-## What good looks like
+## The output
 
-Three properties separate a useful PRD from documentation theatre:
+**One self-contained HTML file.** Styles inline in the same file, no external assets, no build step.
+It gets committed to the repo and rendered in a browser, so the whole PRD lives in one place and
+reads as a designed page rather than a wall of text.
 
-- **Every claim is attributable.** A number in the PRD either came from the user, from the codebase,
-  or is flagged as an assumption. Inventing a plausible-sounding success metric is the single most
-  damaging thing you can do here, because it looks like research and it is not.
-- **The non-goals are as clear as the goals.** "What we're not doing" is what keeps scope from
-  drifting. A PRD without it is a wish list.
-- **Every story can be shown to be done.** If a story has no acceptance criteria, nobody can tell
-  when to stop.
+Alongside it, **a short Markdown stub** — six or seven lines — that goes in the GitHub issue and
+links to the rendered page. The stub is the trailer; the HTML is the film.
+
+`references/publishing.md` covers where the HTML actually goes, and why pasting it into a GitHub
+issue does not work.
+
+### One page means one page
+
+The first version of this skill produced a 3,300-word PRD. Every claim in it was sound and nobody
+would ever read it. Atlassian's whole argument is that a PRD earns its keep by being short enough
+that the team actually revisits it.
+
+The budget:
+
+- **Prose under ~900 words across the whole page.** Not per section — total.
+- Anything longer than a short paragraph is a candidate to become a table, a chart, or a link.
+- A reader should get the whole thing in about five minutes.
+
+Detail is not deleted, it is **moved**. Research, transcripts, header checks, spec extracts and
+option comparisons go into linked material — a separate page, an existing artifact, a doc in the
+repo. The PRD says the conclusion and links to the working.
+
+When you find yourself writing a fourth paragraph in a row, stop: that content wants to be a table.
+
+### Visuals carry the structure
+
+This is the main reason the output is HTML. Use `references/visuals.md` to pick them — it maps each
+part of a PRD to the visual that suits it, and it names the ones that are worse than no visual at
+all.
+
+The rule that matters most: **chart real data only.** Story counts, priority spread and epic
+dependencies are real — they come from the PRD itself. A confidence gauge, a made-up burndown, or a
+"business impact" score out of ten is decoration wearing the costume of evidence, and it damages the
+credibility of every honest number on the page.
 
 ## Process
 
@@ -41,17 +69,17 @@ So first, quietly gather:
 
 - What they said in this conversation — the need, the users, any constraints or deadlines
 - The codebase, if there is one — what exists today, what the product currently does, domain
-  vocabulary, any `CONTEXT.md`, ADRs, or existing PRDs under `docs/`
+  vocabulary, any `CONTEXT.md`, ADRs, or existing PRDs
 - Anything they linked to
 
 ### 2. Ask only about the gaps
 
-Map what you have against the eight sections in `references/atlassian-prd.md`. Then ask about what is
+Map what you have against the sections in `references/atlassian-prd.md`, then ask about what is
 genuinely missing and genuinely matters. In practice the gaps are almost always some of these:
 
 | Gap | Why it matters |
 |---|---|
-| **Who the user is** | Every story starts "As a…". Without this the stories are generic. |
+| **Who the actors are** | Every story starts "As a…". Without this the stories are generic. |
 | **How success is measured** | The most commonly skipped section, and the one that decides whether this was worth building. |
 | **What is explicitly out** | Without it, scope drifts and the team builds forever. |
 | **Target release / deadline** | Changes what makes the cut. |
@@ -67,8 +95,7 @@ that is a legitimate output, and it makes the gaps visible rather than hiding th
 
 ### 3. Break the need down
 
-This is the part that turns a requirement into something a team can actually pick up. Work down the
-ladder:
+This is the part that turns a requirement into something a team can pick up. Work down the ladder:
 
 ```
   outcome        the change in the world you want
@@ -86,46 +113,48 @@ Prioritise with MoSCoW — Must / Should / Could / Won't-this-release. The conve
 **Won't feeds straight into "What we're not doing"**, so prioritisation and scope-fencing are the
 same pass.
 
-`references/breakdown.md` has the detail on writing stories that aren't disguised tasks, and on
-acceptance criteria that are checkable rather than aspirational. Read it before writing section 5.
+Then work out **which epics block which**, because lettering them A–E implies a sequence that is
+usually wrong. The build order is a visual, not a sentence — see `references/visuals.md`.
 
-### 4. Ask where it should go, then write it
+`references/breakdown.md` has the detail on writing stories that aren't disguised tasks, on
+acceptance criteria that are checkable rather than aspirational, and on which stories need criteria
+at all.
 
-Two things to settle:
+### 4. Build the page
 
-- **Destination** — a file in the repo (usually `docs/prd/<slug>.md`), an issue tracker, or something
-  they want to read and share visually.
-- **Format** — this follows from the destination:
+Before writing any HTML, load the **`artifact-design`** skill. The page is a designed document and
+that skill is what stops it looking like a form someone filled in. Load **`dataviz`** before writing
+any chart, and **`artifact-diagramming`** for the epic dependency graph.
 
-| Destination | Format |
-|---|---|
-| Repo file, or pasted into an issue tracker | **Markdown** — `assets/prd-template.md` |
-| Something to read, share, or present | **HTML**, published as an Artifact — `assets/prd-template.html` |
+`assets/prd-page.html` is a working reference implementation — theme-aware tokens, the story card,
+the priority chips, the metric table, the MoSCoW bar, the dependency diagram. Read it for the
+component patterns and the structure, then design the actual page for this actual product. Copying
+it verbatim produces a page that looks like every other PRD, which is the thing `artifact-design`
+exists to prevent.
 
-Markdown is the default. Issue trackers get Markdown always — they render it and mangle HTML.
-Only reach for HTML when the user wants to look at it rather than work from it.
+Two content rules while filling it:
 
-If the answer is HTML, load the `artifact-design` skill before writing the page and publish it as an
-Artifact — the template in `assets/` is structure, not a finished design, and the design pass is
-where a PRD stops looking like a form someone filled in. Add `artifact-diagramming` if a story map
-or flow would carry the breakdown better than a table.
+- **No empty sections.** If a section has nothing in it, either cut it or say what is missing and
+  why — "No design exists yet, and it is needed before Epic A starts" is content; a bare heading is
+  not.
+- **Mark every assumption** as `[ASSUMPTION]` so a reviewer can see in one pass what has been
+  validated and what has not.
 
-Fill the template. Do not leave placeholder headings in with nothing under them; if a section has no
-content, either cut it or say what is missing and why.
+Then write the Markdown stub from `assets/prd-issue-stub.md`.
 
-Mark every assumption inline as **[ASSUMPTION]** so a reviewer can spot in one pass what has been
-validated and what has not.
+### 5. Check it, then say what you found
 
-### 5. Check it against the anti-patterns
-
-Before handing it over, read back over it looking for the failure modes Atlassian calls out:
+Read back over the draft against the failure modes in `references/atlassian-prd.md`:
 
 - The whole thing is spec'd out in detail before any engineering conversation has happened
 - It reads as though it needs iron-clad sign-off before work can start
 - It was written alone, with no developer involved
 - It contains numbers nobody can source
+- It is over the word budget
 
-If any of these are true, fix them or say so plainly when you hand it over.
+**Report this in your message to the user, not as a section in the PRD.** It is a note from you
+about the draft, and it goes stale the moment they act on it. The one exception is "written without
+a developer" — that belongs in Open questions, because it is a live action for a named person.
 
 ### 6. Hand off
 
@@ -143,9 +172,10 @@ can take a well-scoped PRD straight to implementation.
 PRDs going stale is the main documented weakness of this approach, so treat updates as normal work
 rather than an exception. When revisiting one:
 
-- Keep the structure and the file; edit in place so the history is diffable
-- Move resolved items out of **Open questions** and into the section they belong in
+- Edit the same HTML file in place so the history is diffable, and bump the "Last updated" date
+- Move resolved items out of **Open questions** into the section they belong in
 - When a story ships and reality differs from what was written, update the story — a PRD that
   describes something you didn't build is worse than no PRD
 - If scope was cut, move it into **What we're not doing** rather than deleting it, so the decision
   survives
+- Re-check the word budget. Updates are how one-page documents become eight-page documents.
