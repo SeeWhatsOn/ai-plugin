@@ -12,10 +12,30 @@ data the PRD already contains — that is the test for whether it belongs.
 | **Assumptions** | Ordered list, riskiest first, with the riskiest visually marked | The ranking is the information. A chart would add nothing. |
 | **Story counts by priority** | One stacked horizontal bar: Must / Should / Could | Shows at a glance whether prioritisation actually happened. |
 | **Stories within an epic** | Table for the list, cards for the ones with criteria | The table is the index; the cards are the detail. |
-| **Epic dependencies** | Mermaid `flowchart LR` | The only reliable way to show that Epic C blocks A and B. |
+| **Epic dependencies** | Inline SVG — or Mermaid `flowchart LR` if the PRD will only ever be an Artifact | Showing that Epic C blocks A and B is the point. Read the Mermaid warning below before choosing. |
 | **Scope** | Two-column split: in this release / not doing | Putting them side by side is what makes the boundary feel real. |
 | **Open questions** | Table: question · owner · needed by, blockers marked | A blocker with no owner is the most useful thing a PRD can surface. |
 | **Sequencing, when real dates exist** | Mermaid `gantt`, or a simple milestone row | Only when the dates are real. "Q3-ish" is not a date. |
+
+## Mermaid renders in exactly one place
+
+**Mermaid only renders inside the Artifact viewer.** In a plain browser, in a PDF, and in the GitHub
+blob view it is raw text. Since `publishing.md` tells you to commit the HTML to a repo, the default
+outcome is a PRD whose diagram shows as source to everyone who opens the file.
+
+So decide where the PRD will be read *before* you draw it:
+
+- **Artifact only, never committed** — Mermaid is fine, and it is less work.
+- **Committed to a repo, or turned into a PDF** — hand-author inline SVG. Not "a Mermaid diagram
+  small enough to read as source": a diagram nobody can see is not a diagram.
+
+Inline SVG also survives the trip to PDF unchanged, which Mermaid cannot. The `artifact-diagramming`
+skill has the mechanics — size by `viewBox`, strokes and text in `currentColor` so both themes work,
+arrowheads as `<marker>` or a small `<polygon>`.
+
+**Measure every hand-placed label against its box before publishing.** Absolute `x`/`y` in an SVG is
+a guess until something checks it, and an overflowing label is the most common fault in a
+hand-authored diagram. `layout-check.md` has the query.
 
 ## Charting rules
 

@@ -17,9 +17,10 @@
   network dependency is Google Fonts, which is the only font host an Artifact's CSP admits;
   every face has a real fallback stack, so the page holds if it never loads.
 
-  Mermaid: renders natively when published as an Artifact. When this file is committed to a
-  repo and opened from disk it will show as plain text, so keep the diagram small enough to
-  read as source, or render it to inline SVG instead. See `references/publishing.md`.
+  Mermaid: renders natively when published as an Artifact, and NOWHERE ELSE — not in a plain
+  browser, not in a PDF, not in the GitHub blob view. If this file will be committed to a repo
+  or printed, replace the `pre.mermaid` block with hand-authored inline SVG before you publish.
+  See `references/visuals.md`.
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -129,6 +130,15 @@
   a{color:var(--accent)}
   a:focus-visible,summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+  /* Print: for the committed PDF. Chrome prints the light branch of the media query,
+     so the PDF is light whatever the reader's screen was. That is correct for a document. */
+  @media print{
+    .wrap{max-width:none; padding:.4rem 0 1rem; gap:1.5rem}
+    .scroll, figure, .note, .story, .bar{break-inside:avoid}
+    section > h2{break-after:avoid}
+    table{font-size:.74rem}
+  }
 </style>
 </head>
 <body>

@@ -160,6 +160,21 @@ cannot script from outside.
 
 Fix what it finds. Do not publish a page you have not seen.
 
+**Keep the file pure ASCII.** The page carries no `<meta charset>` — an Artifact injects one at
+publish time, so the tag is not written into the file. That means a literal `—` or `·` renders as
+mojibake the moment anyone opens the committed file directly. Write every such character as an HTML
+entity (`&mdash;`, `&middot;`), and check before publishing:
+
+```bash
+python3 -c "print(sorted({c for c in open('<file>',encoding='utf-8').read() if ord(c)>127}))"
+```
+
+An empty list is the pass.
+
+**If the PRD is going into a repo, print it and look at that too.** The PDF is a different rendering
+of the page, not a screenshot: the print stylesheet changes widths and spacing, and Mermaid does not
+survive the trip at all. `references/publishing.md` has the command and the reasoning.
+
 ### 6. Check the content, then say what you found
 
 Read back over the draft against the failure modes in `references/atlassian-prd.md`:

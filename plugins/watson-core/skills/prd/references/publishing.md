@@ -29,11 +29,33 @@ gh api "repos/{owner}/{repo}/pages" --jq '.html_url // "not enabled"' 2>/dev/nul
 If Pages is on, put the file where Pages serves from — usually `docs/prd/<slug>.html` — and link the
 published URL.
 
-**2. Publish it as an Artifact.** No repo setup, renders immediately, and the URL is stable across
+**2. Commit a PDF beside the HTML.** The only format GitHub renders natively in its own file
+viewer — on any plan, private repositories included. One click, no download, no Pages. This is
+usually the right answer for a private repo, and the only one when the org is on GitHub Free, where
+Pages is available for public repositories only.
+
+```bash
+google-chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
+  --no-pdf-header-footer --print-to-pdf=<slug>.pdf "http://127.0.0.1:<port>/<slug>.html"
+```
+
+Serve the file over `http://` for this — the same local server `layout-check.md` already has you
+running. Then **read the PDF back and look at it** before committing. The print stylesheet changes
+the layout, so the PDF is a different rendering of the page, not a screenshot of it.
+
+The HTML stays the source of truth and the PDF is generated from it. Say so in the repo's README and
+regenerate the PDF whenever the HTML changes — two committed files that disagree is worse than one
+file nobody can read. If the machine has no Chrome binary, skip the PDF and tell the user why rather
+than failing.
+
+Third-party viewers do not rescue a private repo: htmlpreview.github.io, raw.githack.com and jsDelivr
+all fetch `raw.githubusercontent.com` unauthenticated, so every one of them 404s.
+
+**3. Publish it as an Artifact.** No repo setup, renders immediately, and the URL is stable across
 updates. Commit the HTML to the repo as the source of truth as well, so it is versioned. Use this
 when Pages is off and the user does not want to turn it on.
 
-**3. Commit it and link the blob URL.** The fallback. `github.com/{owner}/{repo}/blob/main/...`
+**4. Commit it and link the blob URL.** The last resort. `github.com/{owner}/{repo}/blob/main/...`
 shows the source with a "Raw" button; the reader downloads and opens it locally. Honest, but a worse
 experience — say so rather than presenting it as equivalent.
 
