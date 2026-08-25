@@ -126,6 +126,9 @@ Before writing any HTML, load the **`artifact-design`** skill. The page is a des
 that skill is what stops it looking like a form someone filled in. Load **`dataviz`** before writing
 any chart, and **`artifact-diagramming`** for the epic dependency graph.
 
+`references/layout-check.md` has the layout faults that keep recurring — worth a look before you
+write the CSS, not just after.
+
 `assets/prd-page.html` is a working reference implementation — theme-aware tokens, the story card,
 the priority chips, the metric table, the MoSCoW bar, the dependency diagram. Read it for the
 component patterns and the structure, then design the actual page for this actual product. Copying
@@ -142,7 +145,22 @@ Two content rules while filling it:
 
 Then write the Markdown stub from `assets/prd-issue-stub.md`.
 
-### 5. Check it, then say what you found
+### 5. Render it, then fix what you see
+
+**Do this before publishing, not after.** A page can have valid HTML, balanced braces and a
+stylesheet that publishes byte-for-byte intact, and still lay out wrong. Only a browser knows.
+
+Serve the file locally, open it, and run the scan in `references/layout-check.md`. It catches the
+three faults that actually happen: inline content shredded across a grid, boxes colliding, and the
+page scrolling sideways. Then look at the page — rendering catches what geometry cannot, like a
+caption that contradicts the thing it labels.
+
+Run the scan on the **local file**. The published artifact scrolls inside a cross-origin iframe you
+cannot script from outside.
+
+Fix what it finds. Do not publish a page you have not seen.
+
+### 6. Check the content, then say what you found
 
 Read back over the draft against the failure modes in `references/atlassian-prd.md`:
 
@@ -156,7 +174,7 @@ Read back over the draft against the failure modes in `references/atlassian-prd.
 about the draft, and it goes stale the moment they act on it. The one exception is "written without
 a developer" — that belongs in Open questions, because it is a live action for a named person.
 
-### 6. Hand off
+### 7. Hand off
 
 A PRD is the input to an engineering spec, not a replacement for one. When it is approved, point the
 user at the next step:
